@@ -1,0 +1,7 @@
+{application, ewsc, [
+    {description, "Erlang WebSocket client library"},
+    {id, "ewsc"},
+    {vsn, "0.1.0"},
+    {modules, []},
+    {applications, [kernel, stdlib]}
+]}.
