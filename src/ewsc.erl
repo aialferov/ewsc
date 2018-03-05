@@ -10,6 +10,11 @@
 
 -include_lib("wsock/include/wsock.hrl").
 
+-define(SchemeDefaults, {scheme_defaults, [
+    {http, 80}, {https, 443},
+    {ws,   80}, {wss,   443}
+]}).
+
 -define(ConnectOptions, [
     binary,
     {active, false}
@@ -19,7 +24,7 @@ connect(Url) -> connect(Url, [], []).
 connect(Url, Headers) -> connect(Url, Headers, []).
 
 connect(Url, Headers, Options) when is_list(Url) ->
-    case http_uri:parse(Url) of
+    case http_uri:parse(Url, [?SchemeDefaults]) of
         {ok, Result} -> connect(Result, Headers, Options);
         {error, Reason} -> {error, Reason}
     end;
