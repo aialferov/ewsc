@@ -1,6 +1,7 @@
 # Erlang WebSocket client library
 
-Provides functions for working with WebSockets as a client. Based on
+Provides functions for working with WebSockets as a client. Based on the 
+[modified](http://github.com/aialferov/wsock) version of the
 [wsock](http://github.com/madtrick/wsock) library.
 
 ## Usage
