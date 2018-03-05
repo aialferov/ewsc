@@ -5,8 +5,6 @@
     disconnect/1,
 
     send/2,
-    send_close/1, send_close/2,
-
     recv/1, recv/2
 ]).
 
@@ -43,23 +41,20 @@ connect({Tcp, Host, Port, Resource}, Headers, Options) -> cpf_funs:do_while([
 
 disconnect(Socket) -> (tcp_module(Socket)):close(Socket).
 
-send(Socket, Data) ->
-    Packet = wsock_message:encode(Data, [mask, binary]),
-    (tcp_module(Socket)):send(Socket, Packet).
+send(Socket, Data) when is_list(Data) ->
+    tcp_send(Socket, wsock_message:encode(Data, [mask, binary]));
 
-send_close(Socket) ->
-    Packet = wsock_message:encode([], [close]),
-    (tcp_module(Socket)):send(Socket, Packet).
+send(Socket, close) ->
+    tcp_send(Socket, wsock_message:encode([], [close]));
 
-send_close(Socket, {StatusCode, Data}) ->
-    Packet = wsock_message:encode({StatusCode, Data}, [mask, close]),
-    (tcp_module(Socket)):send(Socket, Packet).
+send(Socket, {close, {StatusCode, Data}}) ->
+    tcp_send(Socket, wsock_message:encode({StatusCode, Data}, [mask, close])).
 
 recv(Socket) -> recv(Socket, infinity).
 recv(Socket, Timeout) -> recv_decode(Socket, Timeout, [], false). 
 
 recv_decode(Socket, Timeout, ReceivedMessages, FragmentedMessage) ->
-    case (tcp_module(Socket)):recv(Socket, 0, Timeout) of
+    case tcp_recv(Socket, Timeout) of
         {ok, Packet} -> recv_decode(
             Socket, Timeout, Packet,
             ReceivedMessages, FragmentedMessage
@@ -95,6 +90,9 @@ wsock_http_encode(HandshakeRequest, Headers) ->
     wsock_http:encode(Message#http_message{
         headers = Message#http_message.headers ++ Headers
     }).
+
+tcp_send(Socket, Packet) -> (tcp_module(Socket)):send(Socket, Packet).
+tcp_recv(Socket, Timeout) -> (tcp_module(Socket)):recv(Socket, 0, Timeout).
 
 tcp_module(wss) -> ssl;
 tcp_module(https) -> ssl;
