@@ -15,6 +15,10 @@ shell:
 check:
 	$(REBAR) eunit
 
+upgrade:
+	$(REBAR) upgrade
+	$(REBAR) unlock
+
 clean:
 	$(REBAR) clean -a
 	$(REBAR) unlock
