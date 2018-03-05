@@ -44,6 +44,12 @@ disconnect(Socket) -> (tcp_module(Socket)):close(Socket).
 send(Socket, Data) when is_list(Data) ->
     tcp_send(Socket, wsock_message:encode(Data, [mask, binary]));
 
+send(Socket, ping) ->
+    tcp_send(Socket, wsock_message:encode([], [mask, ping]));
+
+send(Socket, pong) ->
+    tcp_send(Socket, wsock_message:encode([], [mask, pong]));
+
 send(Socket, close) ->
     tcp_send(Socket, wsock_message:encode([], [close]));
 
@@ -78,6 +84,12 @@ decode(Packet, ReceivedMessages, FragmentedMessage) ->
 
 read_message(Message = #message{type = fragmented}, {done, Messages}) ->
     {{fragmented, Message}, Messages};
+
+read_message(#message{type = ping}, {done, Messages}) ->
+    {done, [ping|Messages]};
+
+read_message(#message{type = pong}, {done, Messages}) ->
+    {done, [pong|Messages]};
 
 read_message(#message{type = close}, {done, Messages}) ->
     {done, [close|Messages]};
