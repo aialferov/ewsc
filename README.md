@@ -67,9 +67,9 @@ ok
 The connection can be modified with additional headers and connection options:
 
 ```
-1> Headers = [{"Authorization", "Basic dXNlcm5hbWU6cGFzc3dvcmQK"}].
-2> Options = [{cacertfile, "ca.pem"}].
-3> ewsc:connect("wss://echo.websocket.org", Headers, Options).
+Headers = [{"Authorization", "Basic dXNlcm5hbWU6cGFzc3dvcmQK"}].
+Options = [{cacertfile, "ca.pem"}].
+ewsc:connect("wss://echo.websocket.org", Headers, Options).
 ```
 
 See [ssl](http://erlang.org/doc/man/ssl.html)
