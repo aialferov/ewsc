@@ -2,7 +2,7 @@
 
 -export([
     connect/1, connect/2, connect/3,
-    disconnect/1,
+    close/1,
 
     send/2,
     recv/1, recv/2
@@ -39,7 +39,7 @@ connect({Tcp, Host, Port, Resource}, Headers, Options) -> cpf_funs:do_while([
     {connection, fun(Socket) -> {ok, Socket} end, [{socket}]}
 ]).
 
-disconnect(Socket) -> (tcp_module(Socket)):close(Socket).
+close(Socket) -> (tcp_module(Socket)):close(Socket).
 
 send(Socket, Data) when is_list(Data) ->
     tcp_send(Socket, wsock_message:encode(Data, [mask, binary]));
