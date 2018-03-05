@@ -46,7 +46,7 @@ connect({Tcp, Host, Port, Resource}, Headers, Options) -> cpf_funs:apply_while([
 
 close(Socket) -> (tcp_module(Socket)):close(Socket).
 
-send(Socket, Data) when is_list(Data) ->
+send(Socket, Data) when is_list(Data); is_binary(Data) ->
     tcp_send(Socket, wsock_message:encode(Data, [mask, binary]));
 
 send(Socket, ping) ->
