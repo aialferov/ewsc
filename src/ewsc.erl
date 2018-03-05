@@ -5,6 +5,8 @@
     disconnect/1,
 
     send/2,
+    send_close/1, send_close/2,
+
     recv/1, recv/2
 ]).
 
@@ -43,6 +45,14 @@ disconnect(Socket) -> (tcp_module(Socket)):close(Socket).
 
 send(Socket, Data) ->
     Packet = wsock_message:encode(Data, [mask, binary]),
+    (tcp_module(Socket)):send(Socket, Packet).
+
+send_close(Socket) ->
+    Packet = wsock_message:encode([], [close]),
+    (tcp_module(Socket)):send(Socket, Packet).
+
+send_close(Socket, {StatusCode, Data}) ->
+    Packet = wsock_message:encode({StatusCode, Data}, [mask, close]),
     (tcp_module(Socket)):send(Socket, Packet).
 
 recv(Socket) -> recv(Socket, infinity).
