@@ -27,7 +27,7 @@ connect(Url, Headers, Options) when is_list(Url) ->
 connect({Schema, _UserInfo, Host, Port, Path, Query}, Headers, Options) ->
     connect({tcp_module(Schema), Host, Port, Path ++ Query}, Headers, Options);
 
-connect({Tcp, Host, Port, Resource}, Headers, Options) -> cpf_funs:do_while([
+connect({Tcp, Host, Port, Resource}, Headers, Options) -> cpf_funs:apply_while([
     {socket, fun Tcp:connect/3, [Host, Port, ?ConnectOptions ++ Options]},
     {request, fun wsock_handshake:open/3, [Resource, Host, Port]},
     {request_encoded, fun wsock_http_encode/2, [{request}, Headers]},
