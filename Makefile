@@ -1,5 +1,8 @@
 PROJECT = ewsc
 
+VERSION = $(shell cat src/$(PROJECT).app.src | grep vsn | cut -d\" -f2)
+GIT_SHA = $(shell git rev-parse HEAD | cut -c1-8)
+
 REBAR = $(shell which ./rebar3 || which rebar3)
 
 BUILD_DIR = _build
@@ -12,12 +15,12 @@ shell:
 	$(REBAR) shell
 	$(REBAR) unlock
 
-check:
-	$(REBAR) eunit
-
 upgrade:
 	$(REBAR) upgrade
 	$(REBAR) unlock
+
+check:
+	$(REBAR) eunit
 
 clean:
 	$(REBAR) clean -a
@@ -27,13 +30,4 @@ distclean: clean
 	rm -rf $(BUILD_DIR)
 
 version:
-	@erl \
-		-noshell \
-		-eval 'io:format("~s~n", [\
-			proplists:get_value(vsn, \
-			element(3, \
-			hd(\
-			element(2, \
-			file:consult("src/$(PROJECT).app.src")))))\
-		])' \
-		-s init stop
+	@echo "Version $(VERSION) (git-$(GIT_SHA))"
