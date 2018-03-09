@@ -1,8 +1,7 @@
 # Erlang WebSocket client library
 
 Provides functions for working with WebSockets as a client. Based on the 
-[modified](http://github.com/aialferov/wsock) version of the
-[wsock](http://github.com/madtrick/wsock) library.
+[modified][modified_wsock] version of the [wsock] library.
 
 ## Usage
 
@@ -73,6 +72,11 @@ Options = [{cacertfile, "ca.pem"}].
 ewsc:connect("wss://echo.websocket.org", Headers, Options).
 ```
 
-See [ssl](http://erlang.org/doc/man/ssl.html)
-and [gen_tcp](http://erlang.org/doc/man/gen_tcp.html) Erlang modules
-documentation for more information about possible connection options.
+See [ssl] and [gen_tcp] Erlang modules documentation for more information about
+possible connection options.
+
+<!-- Links -->
+[modified_wsock]: http://github.com/aialferov/wsock
+[wsock]: http://github.com/madtrick/wsock
+[ssl]: http://erlang.org/doc/man/ssl.html
+[gen_tcp]: http://erlang.org/doc/man/gen_tcp.html
