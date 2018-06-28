@@ -105,7 +105,8 @@ read_message(#message{payload = Payload}, {done, Messages}) ->
 wsock_http_encode(HandshakeRequest, Headers) ->
     Message = HandshakeRequest#handshake.message,
     wsock_http:encode(Message#http_message{
-        headers = Message#http_message.headers ++ Headers
+        headers = Message#http_message.headers ++
+                  [{btl(Name), btl(Value)} || {Name, Value} <- Headers]
     }).
 
 tcp_send(Socket, Packet) -> (tcp_module(Socket)):send(Socket, Packet).
@@ -117,3 +118,6 @@ tcp_module(Scheme) when is_atom(Scheme) -> gen_tcp;
 
 tcp_module(_Socket = {sslsocket, _, _}) -> ssl;
 tcp_module(Socket) when is_port(Socket) -> gen_tcp.
+
+btl(B) when is_binary(B) -> binary_to_list(B);
+btl(L) when is_list(L) -> L.
