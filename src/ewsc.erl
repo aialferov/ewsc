@@ -37,10 +37,9 @@ connect({Tcp, Host, Port, Resource}, Headers, Options) -> cpf_funs:apply_while([
     {request, fun wsock_handshake:open/3, [Resource, Host, Port]},
     {request_encoded, fun wsock_http_encode/2, [{request}, Headers]},
     {send, fun Tcp:send/2, [{socket}, {request_encoded}]},
-    {response, fun Tcp:recv/2, [{socket}, 0]},
-    {response_decoded, fun wsock_http:decode/2, [{response}, response]},
+    {response, fun wsock_http_recv/3, [<<>>, Tcp, {socket}]},
     {handled_response, fun wsock_handshake:handle_response/2,
-                       [{response_decoded}, {request}]},
+                       [{response}, {request}]},
     {connection, fun(Socket) -> {ok, Socket} end, [{socket}]}
 ]).
 
@@ -108,6 +107,20 @@ wsock_http_encode(HandshakeRequest, Headers) ->
         headers = Message#http_message.headers ++
                   [{btl(Name), btl(Value)} || {Name, Value} <- Headers]
     }).
+
+wsock_http_decode(Data, _FragmentedFun = {Fun, Args}) ->
+    case wsock_http:decode(Data, response) of
+        {ok, DecodedData} -> {ok, DecodedData};
+        {error, Reason} -> {error, Reason};
+        fragmented_http_message -> apply(Fun, [Data|Args])
+    end.
+
+wsock_http_recv(BufferedData, Tcp, Socket) ->
+    case Tcp:recv(Socket, 0) of
+        {ok, Data} -> wsock_http_decode(<<BufferedData/binary, Data/binary>>,
+                                        {fun wsock_http_recv/3, [Tcp, Socket]});
+        {error, Reason} -> {error, Reason}
+    end.
 
 tcp_send(Socket, Packet) -> (tcp_module(Socket)):send(Socket, Packet).
 tcp_recv(Socket, Timeout) -> (tcp_module(Socket)):recv(Socket, 0, Timeout).

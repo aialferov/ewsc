@@ -1,6 +1,6 @@
 {application, ewsc, [
     {description, "Erlang WebSocket client library"},
-    {vsn, "0.1.1"},
+    {vsn, "0.2.0"},
     {modules, []},
     {applications, [kernel, stdlib, cpflib, wsock]},
     {env, [
