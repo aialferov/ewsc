@@ -1,5 +1,8 @@
 # Erlang WebSocket client library
 
+[![License: Apache-2.0][Apache 2.0 Badge]][Apache 2.0]
+[![GitHub Release Badge]][GitHub Releases]
+
 Provides functions for working with WebSockets as a client. Based on the 
 [modified][modified_wsock] version of the [wsock] library.
 
@@ -75,8 +78,33 @@ ewsc:connect("wss://echo.websocket.org", Headers, Options).
 See [ssl] and [gen_tcp] Erlang modules documentation for more information about
 possible connection options.
 
+## License
+
+Copyright 2018-2019 Anton Alferov (@aialferov)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+
 <!-- Links -->
+
 [modified_wsock]: http://github.com/aialferov/wsock
 [wsock]: http://github.com/madtrick/wsock
 [ssl]: http://erlang.org/doc/man/ssl.html
 [gen_tcp]: http://erlang.org/doc/man/gen_tcp.html
+
+<!-- Badges -->
+
+[Apache 2.0]: https://opensource.org/licenses/Apache-2.0
+[Apache 2.0 Badge]: https://img.shields.io/badge/License-Apache%202.0-yellowgreen.svg?style=flat-square
+[GitHub Releases]: https://github.com/aialferov/ewsc/releases
+[GitHub Release Badge]: https://img.shields.io/github/release/aialferov/ewsc/all.svg?style=flat-square
